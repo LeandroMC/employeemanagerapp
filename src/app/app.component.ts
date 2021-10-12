@@ -11,7 +11,8 @@ import { EmployeeService } from './employee.service';
 })
 export class AppComponent implements OnInit {
   public employees!: Employee[];
-  public editEmployee!: Employee | null;
+  public editEmployee!: any;
+  public deleteEmployee!: any;
 
   constructor(private employeeService: EmployeeService) {}
 
@@ -47,6 +48,7 @@ export class AppComponent implements OnInit {
     }
 
     if (mode === 'delete') {
+      this.deleteEmployee = employee;
       button.setAttribute('data-target', '#deleteEmployeeModal');
     }
 
@@ -81,5 +83,15 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public onDeleteEmployee(employeeId: number): void {}
+  public onDeleteEmployee(employeeId: number): void {
+    this.employeeService.deleteEmployee(employeeId).subscribe(
+      (response: void) => {
+        console.log(response);
+        this.getEmployees();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
 }
